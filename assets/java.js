@@ -41,30 +41,9 @@ $("#add-user").on("click", function(){
   $("#FirstTrain-input").val("");
   $("#Frequency-input").val("");
 
-// Firebase watcher + initial loader HINT: .on("value")
-database.ref().on("value", function(snapshot) {
-
-    // Log everything that's coming out of snapshot
-      console.log(snapshot.val());
-
-
-// Creates local "temporary" object for holding data
-var newTrain = {
-	trainName: trainName,
-    Destination: Destination,
-    FirstTrain: FirstTrain,
-   	Frequency: Frequency
- };
-
-// Uploads data to the database
-	database.ref().push(newTrain)
-
-// Logs everything to console
-  console.log(newTrain.trainName);
-  console.log(newTrain.Destination);
-  console.log(newTrain.FirstTrain);
-  console.log(newTrain.Frequency);
-});
+   // Add each train's data into the table
+  $("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + Destination + "</td><td>" +
+  FirstTrain + "</td><td>" + Frequency "</tr>");
 
 });
 
