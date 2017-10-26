@@ -10,73 +10,129 @@ var config = {
 
 firebase.initializeApp(config);
 
+// Create a variable to reference the database
+    var database = firebase.database();
+
+// Initial Values
+	var trainName = "";
+    var Destination = "";
+    var FirstTrain = "";
+    var Frequency = "";
+
+
 //Grabs user input
- $("#Submit").on("click", function(event){
+$("#add-user").on("click", function(){
  	event.preventDefault();
- 	var trainName = $("#trainName").val().trim();
- 	var Destination = $("#Destination").val().trim();
-	var FirstTrain = moment($("#FirstTrain").val().trim(), "HH.mm").format("X");
-	var Frequency = moment($("#Frequency").val().trim(), "mm").format("Y");
-	console.log(FirstTrain["0"].value)
-	console.log(Frequency["0"].value)
+ 	var trainName = $("#trainName-input").val().trim();
+ 	var Destination = $("#Destination-input").val().trim();
+	var FirstTrain = $("#FirstTrain-input").val().trim();
+	var Frequency = $("#Frequency-input").val().trim();
+
+	database.ref().set({
+		trainName: trainName,
+    	Destination: Destination,
+    	FirstTrain: FirstTrain,
+    	Frequency: Frequency
+	});
+
+	// Clears all of the text-boxes
+  $("#trainName-input").val("");
+  $("#Destination-input").val("");
+  $("#FirstTrain-input").val("");
+  $("#Frequency-input").val("");
+
+// Firebase watcher + initial loader HINT: .on("value")
+database.ref().on("value", function(snapshot) {
+
+    // Log everything that's coming out of snapshot
+      console.log(snapshot.val());
+
 
 // Creates local "temporary" object for holding data
 var newTrain = {
-	name: trainName,
-    destination: Destination,
-    firstTrain: FirstTrain,
-    frequency: Frequency
-  };
+	trainName: trainName,
+    Destination: Destination,
+    FirstTrain: FirstTrain,
+   	Frequency: Frequency
+ };
 
 // Uploads data to the database
 	database.ref().push(newTrain)
 
 // Logs everything to console
-  console.log(newTrain.name);
-  console.log(newTrain.destination);
-  console.log(newTrain.firstTrain);
-  console.log(newTrain.frequency);
-
-// Clears all of the text-boxes
-  $("#TrainName-input").val("");
-  $("#destination-input").val("");
-  $("#FirstTrain-input").val("");
-  $("#Frequency-input").val("");
+  console.log(newTrain.trainName);
+  console.log(newTrain.Destination);
+  console.log(newTrain.FirstTrain);
+  console.log(newTrain.Frequency);
+});
 
 });
 
+    // Firebase watcher + initial loader HINT: .on("value")
+    //database.ref().on("value", function(snapshot) {
 
-database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+      // Log everything that's coming out of snapshot
+      //console.log(snapshot.val());
 
-  console.log(childSnapshot.val());
+
+
+
+// Creates local "temporary" object for holding data
+//var newTrain = {
+//	trainName: trainName,
+  //  Destination: Destination,
+    //FirstTrain: FirstTrain,
+   // Frequency: Frequency
+ // };
+
+// Uploads data to the database
+	//database.ref().push(newTrain)
+
+// Logs everything to console
+  //console.log(newTrain.trainName);
+  //console.log(newTrain.Destination);
+  //console.log(newTrain.FirstTrain);
+  //console.log(newTrain.Frequency);
+
+// Clears all of the text-boxes
+  //$("#TrainName-input").val("");
+  //$("#destination-input").val("");
+  //$("#FirstTrain-input").val("");
+  //$("#Frequency-input").val("");
+
+//});
+
+
+//database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+
+  //console.log(childSnapshot.val());
 
   // Store everything into a variable.
-  var trainName = childSnapshot.val().name;
-  var Destination = childSnapshot.val().destination;
-  var FirstTrain = childSnapshot.val().firstTrain;
-  var Frequency = childSnapshot.val().frequency;
+  //var trainName = childSnapshot.val().name;
+  //var Destination = childSnapshot.val().destination;
+  //var FirstTrain = childSnapshot.val().firstTrain;
+  //var Frequency = childSnapshot.val().frequency;
 
   // Employee Info
-  console.log(trainName);
-  console.log(Destination);
-  console.log(FirstTrain);
-  console.log(Frequency);
+  //console.log(trainName);
+  //console.log(Destination);
+  //console.log(FirstTrain);
+  //console.log(Frequency);
 
   // Prettify the employee start
-  var trainFirstPretty = moment.unix(FirstTrain).format("HH:mm");
+  //var trainFirstPretty = moment.unix(FirstTrain).format("HH:mm");
 
   // Calculate the months worked using hardcore math
   // To calculate the minutes of train
-  var trainFrequency = moment().diff(moment.unix(FirstTrain, "X"), "minutes");
-  console.log(trainFrequency);
+  //var trainFrequency = moment().diff(moment.unix(FirstTrain, "X"), "minutes");
+  //console.log(trainFrequency);
 
   // Calculate the difference between firstTrainPretty and now using frequency
-  var trainLanding = trainFirstPretty - trainFrequency;
-  console.log(trainLanding);
+  //var trainLanding = trainFirstPretty - trainFrequency;
+  //console.log(trainLanding);
 
   // Add each train's data into the table
-  $("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + Destination + "</td><td>" +
-  trainFirstPretty + "</td><td>" + trainFrequency + "</td><td>" + empRate + "</td><td>" + empBilled + "</td></tr>");
-});
-
+  //$("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + Destination + "</td><td>" +
+  //trainFirstPretty + "</td><td>" + trainFrequency + "</td><td>" + empRate + "</td><td>" + empBilled + "</td></tr>");
+//});
 
